@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rice Classification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 350px;
+        }
+        h1 {
+            font-size: 24px;
+            color: #333;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .result, .image-result {
+            margin-top: 15px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+        }
+        .image-preview {
+            margin-top: 15px;
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Rice Classification</h1>
+        
+        <label for="size">Rice Size (mm):</label>
+        <input type="number" id="size" min="2" max="10" step="0.1" placeholder="Enter rice size in mm">
+
+        <button onclick="classifyRice()">Classify Rice</button>
+        <div id="result" class="result"></div>
+
+        <label for="image-upload">Upload an Image:</label>
+        <input type="file" id="image-upload" accept="image/*" onchange="handleImageUpload(event)">
+        <div id="image-container"></div>
+        <div id="image-result" class="image-result"></div>
+    </div>
+
+    <script>
+        function classifyRice() {
+            const size = parseFloat(document.getElementById('size').value);
+            let result = '';
+            
+            if (size >= 6 && size <= 8) {
+                result = 'This is Long Grain Rice.';
+            } else if (size >= 4 && size < 6) {
+                result = 'This is Medium Grain Rice.';
+            } else if (size < 4) {
+                result = 'This is Short Grain Rice.';
+            } else {
+                result = 'Unable to classify this rice with the given parameters.';
+            }
+            
+            document.getElementById('result').textContent = result;
+        }
+
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            const imageContainer = document.getElementById('image-container');
+            const imageResult = document.getElementById('image-result');
+
+            if (file) {
+                reader.onload = function(e) {
+                    const imgElement = document.createElement('img');
+                    imgElement.src = e.target.result;
+                    imgElement.classList.add('image-preview');
+                    imageContainer.innerHTML = '';
+                    imageContainer.appendChild(imgElement);
+                    simulateImageClassification();
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function simulateImageClassification() {
+            const imageResult = document.getElementById('image-result');
+            setTimeout(() => {
+                const types = ['Basmati Rice', 'Jasmine Rice', 'Brown Rice', 'Black Rice'];
+                const sizes = ['Small', 'Medium', 'Large'];
+                const shapes = ['Long', 'Short', 'Round'];
+
+                const type = types[Math.floor(Math.random() * types.length)];
+                const size = sizes[Math.floor(Math.random() * sizes.length)];
+                const shape = shapes[Math.floor(Math.random() * shapes.length)];
+
+                imageResult.textContent = `Type: ${type}, Size: ${size}, Shape: ${shape}`;
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
